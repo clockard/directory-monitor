@@ -97,7 +97,7 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
   @Override
   public void removeListener(final FileAlterationListener listener) {
     if (listener != null) {
-      while (listeners.remove(listener)) {}
+      listeners.remove(listener);
     }
   }
 
@@ -119,7 +119,7 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
   @Override
   public void initialize() throws Exception {
     rootEntry.refresh(rootEntry.getFile());
-    final FileEntry[] children = doListFiles(rootEntry.getFile(), rootEntry);
+    final FileEntry[] children = doListFilesOverride(rootEntry.getFile(), rootEntry);
     rootEntry.setChildren(children);
   }
 
@@ -146,7 +146,7 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
           LOGGER.error("Could not initialize monitored directory after it became available", e);
         }
       }
-      checkAndNotify(rootEntry, rootEntry.getChildren(), listFiles(rootFile));
+      checkAndNotifyOverride(rootEntry, rootEntry.getChildren(), listFilesOverride(rootFile));
     } else if (rootEntry.isExists()) {
       LOGGER.warn(
           "Monitored directory [{}] no longer available. Suspending monitoring until directory becomes available",
@@ -167,29 +167,29 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
    * @param previous The original list of files
    * @param files The current list of files
    */
-  private void checkAndNotify(
+  private void checkAndNotifyOverride(
       final FileEntry parent, final FileEntry[] previous, final File[] files) {
     int c = 0;
     final FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : EMPTY_ENTRIES;
     for (final FileEntry entry : previous) {
       while (c < files.length && comparator.compare(entry.getFile(), files[c]) > 0) {
-        current[c] = createFileEntry(parent, files[c]);
-        doCreate(current[c]);
+        current[c] = createFileEntryOverride(parent, files[c]);
+        doCreateOverride(current[c]);
         c++;
       }
       if (c < files.length && comparator.compare(entry.getFile(), files[c]) == 0) {
-        doMatch(entry, files[c]);
-        checkAndNotify(entry, entry.getChildren(), listFiles(files[c]));
+        doMatchOverride(entry, files[c]);
+        checkAndNotifyOverride(entry, entry.getChildren(), listFilesOverride(files[c]));
         current[c] = entry;
         c++;
       } else {
-        checkAndNotify(entry, entry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
-        doDelete(entry);
+        checkAndNotifyOverride(entry, entry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
+        doDeleteOverride(entry);
       }
     }
     for (; c < files.length; c++) {
-      current[c] = createFileEntry(parent, files[c]);
-      doCreate(current[c]);
+      current[c] = createFileEntryOverride(parent, files[c]);
+      doCreateOverride(current[c]);
     }
     parent.setChildren(current);
   }
@@ -201,10 +201,10 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
    * @param file The file to create an entry for
    * @return A new file entry
    */
-  private FileEntry createFileEntry(final FileEntry parent, final File file) {
+  private FileEntry createFileEntryOverride(final FileEntry parent, final File file) {
     final FileEntry entry = parent.newChildInstance(file);
     entry.refresh(file);
-    final FileEntry[] children = doListFiles(file, entry);
+    final FileEntry[] children = doListFilesOverride(file, entry);
     entry.setChildren(children);
     return entry;
   }
@@ -216,11 +216,11 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
    * @param entry the parent entry
    * @return The child files
    */
-  private FileEntry[] doListFiles(final File file, final FileEntry entry) {
-    final File[] files = listFiles(file);
+  private FileEntry[] doListFilesOverride(final File file, final FileEntry entry) {
+    final File[] files = listFilesOverride(file);
     final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : EMPTY_ENTRIES;
     for (int i = 0; i < files.length; i++) {
-      children[i] = createFileEntry(entry, files[i]);
+      children[i] = createFileEntryOverride(entry, files[i]);
     }
     return children;
   }
@@ -230,7 +230,7 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
    *
    * @param entry The file entry
    */
-  private void doCreate(final FileEntry entry) {
+  private void doCreateOverride(final FileEntry entry) {
     for (final FileAlterationListener listener : listeners) {
       if (entry.isDirectory()) {
         listener.onDirectoryCreate(entry.getFile());
@@ -240,7 +240,7 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
     }
     final FileEntry[] children = entry.getChildren();
     for (final FileEntry aChildren : children) {
-      doCreate(aChildren);
+      doCreateOverride(aChildren);
     }
   }
 
@@ -250,7 +250,7 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
    * @param entry The previous file system entry
    * @param file The current file
    */
-  private void doMatch(final FileEntry entry, final File file) {
+  private void doMatchOverride(final FileEntry entry, final File file) {
     if (entry.refresh(file)) {
       for (final FileAlterationListener listener : listeners) {
         if (entry.isDirectory()) {
@@ -267,7 +267,7 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
    *
    * @param entry The file entry
    */
-  private void doDelete(final FileEntry entry) {
+  private void doDeleteOverride(final FileEntry entry) {
     for (final FileAlterationListener listener : listeners) {
       if (entry.isDirectory()) {
         listener.onDirectoryDelete(entry.getFile());
@@ -284,7 +284,7 @@ public class SafeFileAlterationObserver extends FileAlterationObserver {
    * @return the directory contents or a zero length array if the empty or the file is not a
    *     directory
    */
-  private File[] listFiles(final File file) {
+  private File[] listFilesOverride(final File file) {
     File[] children = null;
     if (file.isDirectory()) {
       children = fileFilter == null ? file.listFiles() : file.listFiles(fileFilter);
