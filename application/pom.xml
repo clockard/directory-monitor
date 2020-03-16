@@ -3,24 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.5.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>org.crl.monitor</groupId>
+		<artifactId>directory-monitor</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>org.crl.monitor</groupId>
-	<artifactId>directory-monitor</artifactId>
+	<artifactId>application</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>directory-monitor</name>
-	<description>Directory Monitor Project</description>
-	<packaging>pom</packaging>
-
-	<properties>
-		<java.version>11</java.version>
-		<sonar.projectKey>clockard_directory-monitor</sonar.projectKey>
-		<sonar.organization>clockard</sonar.organization>
-		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-	</properties>
+	<name>example-app</name>
+	<description>Example Application Directory Monitor</description>
 
 	<dependencies>
 		<dependency>
@@ -52,10 +42,19 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.crl.monitor</groupId>
+			<artifactId>monitor</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>com.diffplug.spotless</groupId>
 				<artifactId>spotless-maven-plugin</artifactId>
@@ -63,7 +62,7 @@
 				<configuration>
 					<java>
 						<licenseHeader>
-							<file>headerJava.txt</file>
+							<file>../headerJava.txt</file>
 						</licenseHeader>
 						<googleJavaFormat>
 							<version>1.7</version>
@@ -83,10 +82,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<modules>
-		<module>monitor</module>
-		<module>application</module>
-	</modules>
 
 </project>
