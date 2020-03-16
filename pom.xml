@@ -17,9 +17,6 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<sonar.projectKey>clockard_directory-monitor</sonar.projectKey>
-		<sonar.organization>clockard</sonar.organization>
-		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencies>
