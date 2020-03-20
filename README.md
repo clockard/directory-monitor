@@ -1,5 +1,6 @@
 # Directory Monitor
 [![CircleCI](https://circleci.com/gh/clockard/directory-monitor.svg?style=shield)](https://app.circleci.com/pipelines/github/clockard/directory-monitor)
+![Java CI with Maven](https://github.com/clockard/directory-monitor/workflows/Java%20CI%20with%20Maven/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=clockard_directory-monitor&metric=alert_status)](https://sonarcloud.io/dashboard?id=clockard_directory-monitor)
 ## Overview
 Directory monitor does just what it says monitors a filesystem directory for file creates, updates, and deletes.
