@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>org.crl.monitor</groupId>
 	<artifactId>directory-monitor</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>directory-monitor</name>
 	<description>Directory Monitor Project</description>
 	<packaging>pom</packaging>
@@ -26,7 +26,7 @@
 		<url>https://github.com/clockard/directory-monitor.git</url>
 		<connection>scm:git:https://github.com/clockard/directory-monitor.git</connection>
 		<developerConnection>scm:git:https://github.com/clockard/directory-monitor.git</developerConnection>
-		<tag>directory-monitor-0.0.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<properties>
