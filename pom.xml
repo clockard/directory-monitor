@@ -5,7 +5,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.6.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.crl.monitor</groupId>
 	<artifactId>directory-monitor</artifactId>
@@ -48,7 +48,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
+			<version>2.7</version>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -86,8 +86,8 @@
 						<googleJavaFormat>
 							<version>1.7</version>
 						</googleJavaFormat>
-						<trimTrailingWhitespace />
-						<removeUnusedImports />
+						<trimTrailingWhitespace/>
+						<removeUnusedImports/>
 					</java>
 				</configuration>
 				<executions>
